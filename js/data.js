@@ -61,7 +61,7 @@ const QUIZ_DATA = {
       },
       {
         type: "choice",
-        prompt: "Der Laden ist ___ neun Uhr ___ siebzehn Uhr geoeffnet.",
+        prompt: "Der Laden ist ___ neun Uhr ___ siebzehn Uhr geöffnet.",
         options: ["am", "um", "von ... bis"],
         answer: "von ... bis",
         explanation: "Kalimat ini menyatakan rentang waktu buka, dari jam 9 sampai jam 17."
