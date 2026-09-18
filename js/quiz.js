@@ -24,19 +24,19 @@ function renderQuiz(quizEl, quiz) {
     correct: new Array(quiz.questions.length).fill(false)
   };
 
-  quizEl.innerHTML = \`
+  quizEl.innerHTML = `
     <div class="quiz-head">
-      <h4>\${escapeHtml(quiz.title)}</h4>
-      <div class="quiz-score" aria-live="polite">Skor: <span data-score>0</span>/\${quiz.questions.length}</div>
+      <h4>${escapeHtml(quiz.title)}</h4>
+      <div class="quiz-score" aria-live="polite">Skor: <span data-score>0</span>/${quiz.questions.length}</div>
     </div>
-    <p class="quiz-hint">\${escapeHtml(quiz.hint || "")}</p>
+    <p class="quiz-hint">${escapeHtml(quiz.hint || "")}</p>
     <div class="progress-bar" aria-hidden="true"><i data-progress></i></div>
     <div class="q-list"></div>
     <div class="quiz-actions">
       <button class="btn ghost" type="button" data-reset>Ulangi latihan</button>
     </div>
     <div class="result" data-result hidden></div>
-  \`;
+  `;
 
   const list = quizEl.querySelector(".q-list");
 
@@ -44,14 +44,14 @@ function renderQuiz(quizEl, quiz) {
     const item = document.createElement("article");
     item.className = "q-item";
     item.dataset.index = String(index);
-    item.innerHTML = \`
+    item.innerHTML = `
       <p class="q-text">
-        <span class="q-num">\${index + 1}</span>
-        <span>\${renderPrompt(question.prompt)}</span>
+        <span class="q-num">${index + 1}</span>
+        <span>${renderPrompt(question.prompt)}</span>
       </p>
-      \${renderQuestionControls(question, index)}
+      ${renderQuestionControls(question, index)}
       <div class="fb" hidden></div>
-    \`;
+    `;
     list.appendChild(item);
   });
 
@@ -127,7 +127,7 @@ function renderQuiz(quizEl, quiz) {
     if (state.answered[index]) return;
 
     const tokenId = event.dataTransfer.getData("text/plain");
-    const wordButton = item.querySelector(\`[data-word][data-token-id="\${cssEscape(tokenId)}"]\`);
+    const wordButton = item.querySelector(`[data-word][data-token-id="${cssEscape(tokenId)}"]`);
     if (wordButton && !wordButton.hidden) addOrderWord(item, wordButton);
   });
 
@@ -152,31 +152,31 @@ function renderQuiz(quizEl, quiz) {
 
 function renderQuestionControls(question) {
   if (question.type === "choice") {
-    return \`
+    return `
       <div class="opts">
-        \${question.options.map((option) => \`
-          <button class="opt" type="button" data-answer="\${escapeAttr(option)}">\${escapeHtml(option)}</button>
-        \`).join("")}
+        ${question.options.map((option) => `
+          <button class="opt" type="button" data-answer="${escapeAttr(option)}">${escapeHtml(option)}</button>
+        `).join("")}
       </div>
-    \`;
+    `;
   }
 
   if (question.type === "fill") {
-    return \`
+    return `
       <div class="fill-row">
         <input class="fill-input" type="text" data-fill autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Jawaban soal">
         <button class="btn" type="button" data-check>Cek</button>
       </div>
-    \`;
+    `;
   }
 
   if (question.type === "order") {
-    return \`
+    return `
       <div class="order-box">
         <div class="word-bank" data-bank aria-label="Kata acak">
-          \${question.words.map((word, wordIndex) => \`
-            <button class="word-chip" type="button" draggable="true" data-word data-token-id="\${wordIndex}">\${escapeHtml(word)}</button>
-          \`).join("")}
+          ${question.words.map((word, wordIndex) => `
+            <button class="word-chip" type="button" draggable="true" data-word data-token-id="${wordIndex}">${escapeHtml(word)}</button>
+          `).join("")}
         </div>
         <div class="answer-zone" data-order-drop aria-label="Area jawaban">
           <span class="answer-placeholder">Taruh kata di sini.</span>
@@ -186,7 +186,7 @@ function renderQuestionControls(question) {
           <button class="btn" type="button" data-check>Cek</button>
         </div>
       </div>
-    \`;
+    `;
   }
 
   return "<p>Jenis soal belum didukung.</p>";
@@ -213,10 +213,10 @@ function checkChoice(item, question, answer, index, state, quizEl, quiz) {
   });
 
   feedback.hidden = false;
-  feedback.className = \`fb \${isCorrect ? "ok" : "no"}\`;
+  feedback.className = `fb ${isCorrect ? "ok" : "no"}`;
   feedback.innerHTML = isCorrect
-    ? \`<b>Benar.</b><span class="sol">\${escapeHtml(question.explanation)}</span>\`
-    : \`<b>Belum tepat.</b><span class="sol">Jawaban benar: <strong>\${escapeHtml(question.answer)}</strong>. \${escapeHtml(question.explanation)}</span>\`;
+    ? `<b>Benar.</b><span class="sol">${escapeHtml(question.explanation)}</span>`
+    : `<b>Belum tepat.</b><span class="sol">Jawaban benar: <strong>${escapeHtml(question.answer)}</strong>. ${escapeHtml(question.explanation)}</span>`;
 
   updateScore(quizEl, quiz, state);
 }
@@ -239,10 +239,10 @@ function checkFill(item, question, index, state, quizEl, quiz) {
   button.disabled = true;
 
   feedback.hidden = false;
-  feedback.className = \`fb \${isCorrect ? "ok" : "no"}\`;
+  feedback.className = `fb ${isCorrect ? "ok" : "no"}`;
   feedback.innerHTML = isCorrect
-    ? \`<b>Benar.</b><span class="sol">\${escapeHtml(question.explanation)}</span>\`
-    : \`<b>Belum tepat.</b><span class="sol">Jawaban benar: <strong>\${escapeHtml(displayAnswer)}</strong>. \${escapeHtml(question.explanation)}</span>\`;
+    ? `<b>Benar.</b><span class="sol">${escapeHtml(question.explanation)}</span>`
+    : `<b>Belum tepat.</b><span class="sol">Jawaban benar: <strong>${escapeHtml(displayAnswer)}</strong>. ${escapeHtml(question.explanation)}</span>`;
 
   updateScore(quizEl, quiz, state);
 }
@@ -265,7 +265,7 @@ function addOrderWord(item, wordButton) {
 
 function returnOrderWord(item, placedWord) {
   const tokenId = placedWord.dataset.tokenId;
-  const bankWord = item.querySelector(\`[data-word][data-token-id="\${cssEscape(tokenId)}"]\`);
+  const bankWord = item.querySelector(`[data-word][data-token-id="${cssEscape(tokenId)}"]`);
   const zone = item.querySelector("[data-order-drop]");
 
   if (bankWord) bankWord.hidden = false;
@@ -298,10 +298,10 @@ function checkOrder(item, question, index, state, quizEl, quiz) {
   });
 
   feedback.hidden = false;
-  feedback.className = \`fb \${isCorrect ? "ok" : "no"}\`;
+  feedback.className = `fb ${isCorrect ? "ok" : "no"}`;
   feedback.innerHTML = isCorrect
-    ? \`<b>Benar.</b><span class="sol">\${escapeHtml(question.explanation)}</span>\${renderKlammerFeedback(expectedAnswer, question.modalIndex)}\`
-    : \`<b>Belum tepat.</b><span class="sol">Jawaban benar: <strong>\${escapeHtml(expectedAnswer.join(" "))}</strong>. \${escapeHtml(question.explanation)}</span>\${renderKlammerFeedback(expectedAnswer, question.modalIndex)}\`;
+    ? `<b>Benar.</b><span class="sol">${escapeHtml(question.explanation)}</span>${renderKlammerFeedback(expectedAnswer, question.modalIndex)}`
+    : `<b>Belum tepat.</b><span class="sol">Jawaban benar: <strong>${escapeHtml(expectedAnswer.join(" "))}</strong>. ${escapeHtml(question.explanation)}</span>${renderKlammerFeedback(expectedAnswer, question.modalIndex)}`;
 
   updateScore(quizEl, quiz, state);
 }
@@ -325,10 +325,10 @@ function renderKlammerFeedback(words, modalIndex) {
   const modalPosition = Number.isInteger(modalIndex) ? modalIndex : 1;
   const parts = words.map((word, index) => {
     const className = index === modalPosition || index === words.length - 1 ? "klammer-word" : "";
-    return \`<span class="\${className}">\${escapeHtml(word)}</span>\`;
+    return `<span class="${className}">${escapeHtml(word)}</span>`;
   }).join("");
 
-  return \`<div class="mini-klammer">\${parts}</div>\`;
+  return `<div class="mini-klammer">${parts}</div>`;
 }
 
 function updateScore(quizEl, quiz, state) {
@@ -337,15 +337,15 @@ function updateScore(quizEl, quiz, state) {
   const progress = Math.round((answered / quiz.questions.length) * 100);
 
   quizEl.querySelector("[data-score]").textContent = String(score);
-  quizEl.querySelector("[data-progress]").style.width = \`\${progress}%\`;
+  quizEl.querySelector("[data-progress]").style.width = `${progress}%`;
 
   if (answered === quiz.questions.length) {
     const result = quizEl.querySelector("[data-result]");
     result.hidden = false;
-    result.innerHTML = \`
-      <p class="big">\${score}/\${quiz.questions.length}</p>
-      <p>\${score === quiz.questions.length ? "Sempurna. Polanya sudah aman untuk topik ini." : "Bagus. Ulangi soal yang merah sampai polanya terasa otomatis."}</p>
-    \`;
+    result.innerHTML = `
+      <p class="big">${score}/${quiz.questions.length}</p>
+      <p>${score === quiz.questions.length ? "Sempurna. Polanya sudah aman untuk topik ini." : "Bagus. Ulangi soal yang merah sampai polanya terasa otomatis."}</p>
+    `;
   }
 }
 
